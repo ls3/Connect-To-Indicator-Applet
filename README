@@ -3,6 +3,11 @@ Lyle Scott III
 lyle@digitalfoo.net
 http://digitalfoo.net
 
+Step 1. edit the variables in the Makefile.
+Step 2. make sure you at least look at the variables in the Makefile.
+run 'make runonce' to demo the indicator applet
+run 'make install' to install to $FILE_DIR
+
 DEPENDENCIES
 python-gtk2
 
@@ -13,17 +18,17 @@ TO INSTALL
 make install (includes autostart_on)
 
 TO UNINSTALL (included autostart_off)
-make remove
+make uninstall
 
 AUTOSTART (with gnome-session)
 make autostart_on
 make autostart_off
 
 TO ADD HOSTS
-edit __FILE_DIR__/config.xml
+edit $FILE_DIR/config.xml
 
 SET CONFIG TO DEFAULTS
 make configinstall
 
-EXECUTE MANUALLY
+Try without installing:
 make runonce
