@@ -54,7 +54,6 @@ class Config:
             raise Exception('NO CONFIG: %s' % CONFIG_PATH)
         config = xml.dom.minidom.parse(path).getElementsByTagName('Config')[0]
         for child in config.childNodes:
-            #if child.attributes is None: continue
             if child.nodeName == 'Settings':
                 self._parseSettings(child)
             elif child.nodeName == 'HostDefaults':
@@ -105,21 +104,27 @@ class Config:
         return self._settings[attr]
 
 
-class SSHGoToIndicator:
-    def __init__(self, config):      
+class ConnectToIndicator:
+    def __init__(self, config, debug=False):
+        self.DEBUG = debug
         self.config = Config()
-        self.ind = appindicator.Indicator('SSH-To_indicator',
+        self.ind = appindicator.Indicator('Connect-To_indicator',
                                           'indicator-messages',
                                           appindicator.CATEGORY_APPLICATION_STATUS)
         self.ind.set_status(appindicator.STATUS_ACTIVE)
         self.ind.set_icon(self.config.getSettings('icon'))
-        #self.ind.set_attention_icon('new-messages-red')
-        self.ind.set_menu(self.menu_setup())
+        self.ind.set_menu(self._menuSetup())
     
     def main(self):
         gtk.main()
 
-    def menu_setup(self):
+    def _setDefaults(self, info):
+            # if the info isn't set by the user, substitute the default value
+            info.update(dict([d for d in self.config.getDefaults().items()
+                              if d[0].startswith(info['protocol']) 
+                              and d[0] not in info]))
+        
+    def _menuSetup(self):
         menu = gtk.Menu()
         
         menu_item = gtk.SeparatorMenuItem()
@@ -127,14 +132,10 @@ class SSHGoToIndicator:
         menu.append(menu_item)
 
         for (displayname, info) in self.config.getHostinfo().items():
-            port = self.config.getDefaults('port')
-            sshargs = self.config.getDefaults('sshargs')
-            
-            # if the info isn't set by the user, substitute the default value
-            info.update(dict([d for d in self.config.getDefaults().items()
-                              if d[0] not in info]))
-                
-            menu_item = gtk.MenuItem(info['name'])
+            self._setDefaults(info)
+
+            menu_name = '%s | %s' % (info['protocol'].upper(), info['name'],)
+            menu_item = gtk.MenuItem(menu_name)
             menu_item.set_name(pickle.dumps(info))
             menu_item.connect('activate', self.connect)
             menu_item.show()
@@ -158,16 +159,35 @@ class SSHGoToIndicator:
 
     def connect(self, widget):    	
     	info = pickle.loads(widget.get_name())
-        subcmd = 'ssh %s@%s' % (info['user'], info['host'])
-        cmd = '%s %s "%s"' % (self.config.getSettings('terminal_cmd'), 
-                              self.config.getSettings('wrapper_script'), 
-                              subcmd)
+        if info['protocol'] == 'ssh':
+            self._connect_ssh(info)
+        elif info['protocol'] == 'rdp':
+            self._connect_rdp(info)
+        else:
+            raise Exception('unknown protocol: %s' % (info['protocol'],))
+
+    def _connect_ssh(self, info):
+        if self.DEBUG:
+            print 'Connecting to `ssh` host...\n', '\n'.join(map(str, info.items()))
+        if '-p ' not in (info['ssh_preargs'], info['ssh_postargs'],):
+            info['ssh_preargs'] += ' -p %s ' % (info['ssh_port'],)
+        subcmd = '%s %s@%s %s' % (info['ssh_preargs'], info['user'], 
+                                  info['host'], info['ssh_postargs'],)
+        cmd = '%s %s "%s"' % (info['ssh_cmd'], info['ssh_wrapper'], subcmd,)
+        subprocess.Popen(shlex.split(cmd))
+
+    def _connect_rdp(self, info):
+        if self.DEBUG:
+            print 'Connecting to `rdp` host...\n', '\n'.join(map(str, info.items()))
+        subcmd = ' '.join((info['rdp_preargs'], info['host'], 
+                           info['rdp_postargs'],))
+        cmd = '%s "%s %s"' % (info['rdp_wrapper'], info['rdp_cmd'], subcmd,)
         subprocess.Popen(shlex.split(cmd))
 
     def show_about(self, widget):
         dialog = gtk.AboutDialog()
         dialog.set_position(gtk.WIN_POS_CENTER)
-        dialog.set_program_name("SSH-To Gnome Indicator Applet")
+        dialog.set_program_name("Connect-To Gnome Indicator Applet")
         dialog.set_version("0.1")
         dialog.set_copyright("(C) Lyle Scott III\n\nlyle@digitalfoo.net")
         dialog.set_website('http://digitalfoo.net')
@@ -181,5 +201,5 @@ class SSHGoToIndicator:
 
 if __name__ == "__main__":
     config = Config()
-    indicator = SSHGoToIndicator(config)
+    indicator = ConnectToIndicator(config)
     indicator.main()

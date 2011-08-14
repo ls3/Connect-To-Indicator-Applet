@@ -2,39 +2,46 @@
 Lyle Scott, III
 lyle@digitalfoo.net
 
-Configure connection options for hosts.
-    
 Settings
-    terminal_cmd    gnome-terminal -x
+    [Settings]
+    ssh_cmd         gnome-terminal -x
                     xfce4-terminal -x
                     Eterm -e
-    wrapper_script  __FILE_DIR__/terminal_wrapper.sh
-    icon            __FILE_DIR__/icon.png
-    user            <user that is running the script>
-    host            <not set>
-    port            22
-    sshargs         <not set> 
+    rdp_cmd         rdesktop
 -->
 
 <Config>
-  <Settings 
-    terminal_cmd="__DEFAULT_TERMINAL__ -x"
-    wrapper_script="sh __FILE_DIR__/terminal_wrapper.sh"
-    icon="__FILE_DIR__/icon.png" />
+    <Settings 
+        icon="__FILE_DIR__/icon.png"
+    />
   
-  <HostDefaults 
-    port="22" 
-    sshargs="" />
+    <HostDefaults 
+        ssh_preargs=""
+        ssh_postargs="" 
+        ssh_port="22"
+        ssh_cmd="__DEFAULT_TERMINAL__ -x"
+        ssh_wrapper="sh __FILE_DIR__/ssh_wrapper.sh"
 
-  <Hosts>
-    <!-- EXAMPLES: -->
-    <Host name="root@localhost" 
-          user="root" 
-          host="localhost" />
+        rdp_preargs=""
+        rdp_postargs=""
+        rdp_port="3389"
+        rdp_cmd="__DEFAULT_RDPAPP__"
+        rdp_wrapper="sh __FILE_DIR__/rdp_wrapper.sh"
+    />
+
+    <Hosts>
+        <!-- SSH EXAMPLE -->
+        <Host protocol='ssh'
+            name="root@localhost" 
+            user="root" 
+            host="localhost"
+        />
           
-    <Host name="foo@bar"
-          user="myuser"
-          host="somehost.com"
-          sshargs="-A" />
-  </Hosts>
+        <!-- RDP EXAMPLE -->
+        <Host protocol='rdp'
+            name="bill@microsoft.com"
+            host="microsoft.com"
+            rdp_preargs="-u administrator -g 1024x768"
+        />
+    </Hosts>
 </Config>
