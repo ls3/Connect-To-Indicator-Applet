@@ -4,6 +4,7 @@
 FILE_DIR = $(HOME)/.connect-to_indicator
 DEFAULT_TERMINAL = /usr/bin/gnome-terminal
 DEFAULT_RDPAPP = /usr/bin/rdesktop
+DEFAULT_VNCAPP = /usr/bin/vncviewer
 AUTOSTART_FILE = ~/.config/autostart/connect-to_indicator.desktop
 
 
@@ -49,7 +50,8 @@ autostart_off:
 config:
 	@sed "s|__FILE_DIR__|$(FILE_DIR)|" config.xml.dist > config.xml.tmp.a
 	@sed "s|__DEFAULT_TERMINAL__|$(DEFAULT_TERMINAL)|" config.xml.tmp.a > config.xml.tmp.b
-	@sed "s|__DEFAULT_RDPAPP__|$(DEFAULT_RDPAPP)|" config.xml.tmp.b > config.xml
+	@sed "s|__DEFAULT_RDPAPP__|$(DEFAULT_RDPAPP)|" config.xml.tmp.b > config.xml.tmp.c
+	@sed "s|__DEFAULT_VNCAPP__|$(DEFAULT_VNCAPP)|" config.xml.tmp.c > config.xml
 	@echo Config generated:
 	@echo `pwd`/config.xml
 

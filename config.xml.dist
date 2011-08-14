@@ -27,6 +27,12 @@ Settings
         rdp_port="3389"
         rdp_cmd="__DEFAULT_RDPAPP__"
         rdp_wrapper="sh __FILE_DIR__/rdp_wrapper.sh"
+
+        vnc_preargs=""
+        vnc_postargs=""
+        vnc_port="5900"
+        vnc_cmd="__DEFAULT_VNCAPP__"
+        vnc_wrapper="sh __FILE_DIR__/vnc_wrapper.sh"
     />
 
     <Hosts>
@@ -42,6 +48,12 @@ Settings
             name="bill@microsoft.com"
             host="microsoft.com"
             rdp_preargs="-u administrator -g 1024x768"
+        />
+
+        <!-- VNC EXAMPLE -->
+        <Host protocol='vnc'
+            name="vnc"
+            host="localhost"
         />
     </Hosts>
 </Config>
