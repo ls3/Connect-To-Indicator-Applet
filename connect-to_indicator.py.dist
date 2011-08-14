@@ -113,7 +113,7 @@ class ConnectToIndicator:
                                           appindicator.CATEGORY_APPLICATION_STATUS)
         self.ind.set_status(appindicator.STATUS_ACTIVE)
         self.ind.set_icon(self.config.getSettings('icon'))
-        self.ind.set_menu(self._menuSetup())
+        self.ind.set_menu(self._menu_setup())
     
     def main(self):
         gtk.main()
@@ -124,23 +124,32 @@ class ConnectToIndicator:
                               if d[0].startswith(info['protocol']) 
                               and d[0] not in info]))
         
-    def _menuSetup(self):
+    def _menu_setup(self):
+        hostInfo = self.config.getHostinfo().items()
+        submenu_items = {}
         menu = gtk.Menu()
-        
-        menu_item = gtk.SeparatorMenuItem()
-        menu_item.show()
-        menu.append(menu_item)
 
-        for (displayname, info) in self.config.getHostinfo().items():
+        # build a list of menu items per submenu name (VNC, RDP, SSH, etc)
+        for (displayname, info,) in hostInfo:
             self._setDefaults(info)
-
-            menu_name = '%s  --  %s' % (info['protocol'].upper(), info['name'],)
+            menu_name = '%s' % (info['name'],)
             menu_item = gtk.MenuItem(menu_name)
             menu_item.set_name(pickle.dumps(info))
             menu_item.connect('activate', self.connect)
             menu_item.show()
-            menu.append(menu_item)
+            submenu_items.setdefault(info['protocol'], []).append(menu_item)
 
+        # build a menu item for each submenu and add it to the main menu
+        for (protocol, menuitems,) in submenu_items.items():
+            menu_name = protocol.upper()
+            menu_item = gtk.MenuItem(menu_name)
+            menu_item.show()
+            submenu = gtk.Menu()
+            for menuitem in menuitems:
+                submenu.append(menuitem)
+            menu_item.set_submenu(submenu)
+            menu.append(menu_item)
+            
         menu_item = gtk.SeparatorMenuItem()
         menu_item.show()
         menu.append(menu_item)

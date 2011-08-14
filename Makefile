@@ -62,6 +62,8 @@ installconfig: config
 
 runonce: config
 	@echo Look in the indicator section on the top gnome bar...
+	@sed "s|$(FILE_DIR)|`pwd`|" config.xml > config.xml.tmp.c
+	@mv config.xml.tmp.c config.xml
 	@sed "s|__FILE_DIR__|`pwd`|" connect-to_indicator.py.dist > connect-to_indicator.py
 	@python connect-to_indicator.py
 
