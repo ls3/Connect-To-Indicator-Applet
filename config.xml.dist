@@ -1,0 +1,40 @@
+<!-- 
+Lyle Scott, III
+lyle@digitalfoo.net
+
+Configure connection options for hosts.
+    
+Settings
+    terminal_cmd    gnome-terminal -x
+                    xfce4-terminal -x
+                    Eterm -e
+    wrapper_script  __FILE_DIR__/terminal_wrapper.sh
+    icon            __FILE_DIR__/icon.png
+    user            <user that is running the script>
+    host            <not set>
+    port            22
+    sshargs         <not set> 
+-->
+
+<Config>
+  <Settings 
+    terminal_cmd="__DEFAULT_TERMINAL__ -x"
+    wrapper_script="sh __FILE_DIR__/terminal_wrapper.sh"
+    icon="__FILE_DIR__/icon.png" />
+  
+  <HostDefaults 
+    port="22" 
+    sshargs="" />
+
+  <Hosts>
+    <!-- EXAMPLES: -->
+    <Host name="root@localhost" 
+          user="root" 
+          host="localhost" />
+          
+    <Host name="foo@bar"
+          user="myuser"
+          host="somehost.com"
+          sshargs="-A" />
+  </Hosts>
+</Config>

@@ -1,0 +1,29 @@
+CONTACT
+Lyle Scott III
+lyle@digitalfoo.net
+http://digitalfoo.net
+
+DEPENDENCIES
+python-gtk2
+
+GET LIST OF MAKE COMMANDS
+make
+
+TO INSTALL
+make install (includes autostart_on)
+
+TO UNINSTALL (included autostart_off)
+make remove
+
+AUTOSTART (with gnome-session)
+make autostart_on
+make autostart_off
+
+TO ADD HOSTS
+edit ~/.ssh-to_indicator/config.xml
+
+# SET CONFIG TO DEFAULTS
+make configinstall
+
+EXECUTE MANUALLY
+make runonce
