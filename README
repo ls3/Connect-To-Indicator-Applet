@@ -20,9 +20,9 @@ make autostart_on
 make autostart_off
 
 TO ADD HOSTS
-edit ~/.ssh-to_indicator/config.xml
+edit __FILE_DIR__/config.xml
 
-# SET CONFIG TO DEFAULTS
+SET CONFIG TO DEFAULTS
 make configinstall
 
 EXECUTE MANUALLY

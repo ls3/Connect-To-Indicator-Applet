@@ -1,8 +1,8 @@
 
 [Desktop Entry]
-Name=SSH-To Indicator
-Comment=SSH-To Indicator Applet
-Exec=__FILE_DIR__/ssh-to_indicator.py
+Name=Connect-To Indicator
+Comment=Connect-To Indicator Applet
+Exec=__FILE_DIR__/connect-to_indicator.py
 Type=Application
 X-GNOME-Autostart-Phase=Applications
 X-GNOME-AutoRestart=true

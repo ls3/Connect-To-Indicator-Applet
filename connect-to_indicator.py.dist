@@ -42,13 +42,11 @@ import pickle
 import shutil
 import os
 import gnomeapplet
-#import gobject
 import pygtk
 pygtk.require('2.0')
 
-FILE_DIR = '.ssh-to_indicator'
-CONFIG_FILE = 'config.xml'
-CONFIG_PATH='/'.join([os.getenv('HOME'), FILE_DIR, CONFIG_FILE])
+FILE_DIR = '__FILE_DIR__'
+CONFIG_PATH = '%s/config.xml' % (FILE_DIR,)
 
 class Config:
     def __init__(self, path=CONFIG_PATH):

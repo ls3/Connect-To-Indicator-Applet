@@ -1,9 +1,9 @@
 # Lyle Scott, III
 # lyle@digitalfoo.net
 
-FILE_DIR = $(HOME)/.ssh-to_indicator
+FILE_DIR = $(HOME)/.connect-to_indicator
 DEFAULT_TERMINAL = /usr/bin/gnome-terminal
-AUTOSTART_FILE = ~/.config/autostart/ssh-to_indicator.desktop
+AUTOSTART_FILE = ~/.config/autostart/connect-to_indicator.desktop
 
 
 default: usage
@@ -19,8 +19,9 @@ usage:
 
 install: installconfig autostart_on
 	@mkdir -p $(FILE_DIR)
+	@sed "s|__FILE_DIR__|$(FILE_DIR)|" connect-to_indicator.py.dist > connect-to_indicator.py
 	@cp -i README *.py *.sh icon.png $(FILE_DIR)
-	@chmod +x $(FILE_DIR)/ssh-to_indicator.py
+	@chmod +x $(FILE_DIR)/connect-to_indicator.py
 	@echo ''
 	@echo Enable autostart \(via gnome-session\):
 	@echo make autostart_on  
@@ -32,8 +33,8 @@ uninstall: autostart_off
 
 autostart_on:
 	@mkdir -p ~/.config/autostart/
-	@sed "s|__FILE_DIR__|$(FILE_DIR)|" ssh-to_indicator.desktop.dist > ssh-to_indicator.desktop
-	@cp -i ssh-to_indicator.desktop ~/.config/autostart/
+	@sed "s|__FILE_DIR__|$(FILE_DIR)|" connect-to_indicator.desktop.dist > connect-to_indicator.desktop
+	@cp -i connect-to_indicator.desktop ~/.config/autostart/
 	@echo autostart toggled ON
 
 autostart_off:
@@ -53,7 +54,7 @@ installconfig: config
 
 runonce: config
 	@echo Look in the indicator section on the top gnome bar...
-	@python ssh-to_indicator.py
+	@python connect-to_indicator.py
 
 clean:
-	rm -f config.xml config.xml.tmp ssh-to_indicator.desktop
+	rm -f config.xml config.xml.tmp connect-to_indicator.desktop connect-to_indicator.py
