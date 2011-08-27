@@ -23,7 +23,7 @@ usage:
 
 install: installconfig autostart_on
 	@mkdir -p $(FILE_DIR)
-	@echo ''
+	@echo 'connect-to_indicator.py.dist --> connect-to_indicator.py'
 	@cp -i connect-to_indicator.py.dist connect-to_indicator.py
 	@sed -i "s|__FILE_DIR__|$(FILE_DIR)|" connect-to_indicator.py
 	@cp -i README *.py *.sh icon.png $(FILE_DIR)
@@ -41,8 +41,10 @@ uninstall: autostart_off
 
 autostart_on:
 	@mkdir -p ~/.config/autostart/
+	@echo 'connect-to_indicator.desktop.dist --> connect-to_indicator.desktop' 
 	@cp -i connect-to_indicator.desktop.dist connect-to_indicator.desktop
 	@sed -i "s|__FILE_DIR__|$(FILE_DIR)|" connect-to_indicator.desktop
+	@echo 'connect-to_indicator.desktop --> ~/.config/autostart/' 
 	@cp -i connect-to_indicator.desktop ~/.config/autostart/
 	@echo autostart toggled ON
 
@@ -50,7 +52,8 @@ autostart_off:
 	@test ! -f $(AUTOSTART_FILE) || rm $(AUTOSTART_FILE)
 	@echo autostart toggled OFF
 
-config:
+config: 
+	@echo "config.xml.dist --> config.xml"
 	@cp -i config.xml.dist config.xml
 	@sed -i "s|__FILE_DIR__|$(FILE_DIR)|" config.xml
 	@sed -i "s|__DEFAULT_TERMINAL__|$(DEFAULT_TERMINAL)|" config.xml

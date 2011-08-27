@@ -1,0 +1,9 @@
+
+[Desktop Entry]
+Name=Connect-To Indicator
+Comment=Connect-To Indicator Applet
+Exec=/home/ls3/.connect-to_indicator/connect-to_indicator.py
+Type=Application
+X-GNOME-Autostart-Phase=Applications
+X-GNOME-AutoRestart=true
+X-GNOME-Autostart-enabled=true

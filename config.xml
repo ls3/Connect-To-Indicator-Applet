@@ -1,0 +1,59 @@
+<!-- 
+Lyle Scott, III
+lyle@digitalfoo.net
+
+Settings
+    [Settings]
+    ssh_cmd         gnome-terminal -x
+                    xfce4-terminal -x
+                    Eterm -e
+    rdp_cmd         rdesktop
+-->
+
+<Config>
+    <Settings 
+        icon="/home/ls3/.connect-to_indicator/icon.png"
+    />
+  
+    <HostDefaults 
+        ssh_preargs=""
+        ssh_postargs="" 
+        ssh_port="22"
+        ssh_cmd="/usr/bin/gnome-terminal -x"
+        ssh_wrapper="sh /home/ls3/.connect-to_indicator/ssh_wrapper.sh"
+
+        rdp_preargs=""
+        rdp_postargs=""
+        rdp_port="3389"
+        rdp_cmd="/usr/bin/rdesktop"
+        rdp_wrapper="sh /home/ls3/.connect-to_indicator/rdp_wrapper.sh"
+
+        vnc_preargs=""
+        vnc_postargs=""
+        vnc_port="5900"
+        vnc_cmd="/usr/bin/vncviewer"
+        vnc_wrapper="sh /home/ls3/.connect-to_indicator/vnc_wrapper.sh"
+    />
+
+    <Hosts>
+        <!-- SSH EXAMPLE -->
+        <Host protocol='ssh'
+            name="root@localhost" 
+            user="root" 
+            host="localhost"
+        />
+          
+        <!-- RDP EXAMPLE -->
+        <Host protocol='rdp'
+            name="bill@microsoft.com"
+            host="microsoft.com"
+            rdp_preargs="-u administrator -g 1024x768"
+        />
+
+        <!-- VNC EXAMPLE -->
+        <Host protocol='vnc'
+            name="vnc"
+            host="localhost"
+        />
+    </Hosts>
+</Config>
